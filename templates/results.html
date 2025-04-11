@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    {% if shortlisted %}
+                        <i class="bi bi-check-circle-fill display-4 text-success mb-3"></i>
+                    {% else %}
+                        <i class="bi bi-x-circle-fill display-4 text-danger mb-3"></i>
+                    {% endif %}
+                    <h2 class="card-title h3">Application Results</h2>
+                </div>
+
+                <div class="mb-4 p-3 border rounded candidate-info-card">
+                    <h5 class="mb-3 text-gradient"><i class="bi bi-person-badge me-2"></i>Candidate Profile</h5>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="info-box name-box">
+                                <p class="mb-1 label">Full Name</p>
+                                <p class="mb-0 value">{{ name }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="info-box email-box">
+                                <p class="mb-1 label">Email Address</p>
+                                <p class="mb-0 value">{{ email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="bi bi-graph-up me-2"></i>Evaluation Results</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Match Score</h6>
+                            <div class="progress mt-2" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ score }}%" 
+                                     aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <span class="evaluation-score">{{ "%.1f"|format(score) }}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <h6 class="mb-0">Status</h6>
+                        <div class="ms-auto">
+                            {% if shortlisted %}
+                                <span class="shortlisted-badge success">
+                                    <i class="bi bi-check-circle me-1"></i>Shortlisted
+                                </span>
+                            {% else %}
+                                <span class="shortlisted-badge danger">
+                                    <i class="bi bi-x-circle me-1"></i>Not Shortlisted
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if shortlisted and email_draft %}
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="bi bi-envelope me-2"></i>Interview Invitation</h5>
+                    <div class="email-draft p-3 rounded">
+                        <pre class="mb-0" style="white-space: pre-wrap;">{{ email_draft }}</pre>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-2"></i>Submit Another Application
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted">
+                <i class="bi bi-info-circle me-2"></i>
+                Results are based on our AI-powered screening system
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

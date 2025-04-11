@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Search History{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="card-title h3 mb-1">
+                            <i class="bi bi-clock-history me-2"></i>Application History
+                        </h2>
+                        <p class="text-muted mb-0">Track all CV screening results</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" id="statusFilter">
+                            <option value="all">All Status</option>
+                            <option value="selected">Selected</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="historyTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="sortable" data-sort="index">#</th>
+                                <th scope="col" class="sortable" data-sort="name">Name</th>
+                                <th scope="col" class="sortable" data-sort="job">Job Title</th>
+                                <th scope="col" class="sortable" data-sort="score">Score</th>
+                                <th scope="col" class="sortable" data-sort="status">Status</th>
+                                <th scope="col" class="sortable" data-sort="date">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ candidate.name }}</td>
+                                <td>{{ candidate.job_title }}</td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar {% if candidate.score >= 70 %}bg-success{% elif candidate.score >= 50 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             style="width: {{ candidate.score }}%" 
+                                             aria-valuenow="{{ candidate.score }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <small class="d-block mt-1">{{ "%.1f"|format(candidate.score) }}%</small>
+                                </td>
+                                <td>
+                                    {% if candidate.shortlisted %}
+                                    <span class="badge bg-success">Selected</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ candidate.created_at.strftime('%Y-%m-%d %H:%M') if candidate.created_at else 'N/A' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="bi bi-inbox-fill display-4 d-block mb-2 text-muted"></i>
+                                    <p class="text-muted mb-0">No application history available</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
